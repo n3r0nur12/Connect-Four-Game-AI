@@ -23,6 +23,7 @@ class Helper:
     
     @staticmethod
     def valid_column_number(table,col):
+        col = str(col)
         if col.isnumeric()==False:
             return False
 
