@@ -6,6 +6,7 @@ class Helper:
         table = [[" "] * m for i in range(n)]
         return table
 
+
     @staticmethod
     def print_table(table):
         for i in range(8):
@@ -21,6 +22,7 @@ class Helper:
             print("-"+str(i+1),end="")
         print("-")
     
+
     @staticmethod
     def valid_column_number(table,col):
         col = str(col)
@@ -36,13 +38,23 @@ class Helper:
         
         return True
 
+
     @staticmethod
     def perform_move(table,col,isRed):
         col = col - 1
         for i in (6,5,4,3,2,1,0):
             if table[i][col]==" ":
                 table[i][col] = "R" if (isRed) else "B"
-                break
+                return i
+
+
+    @staticmethod
+    def no_more_moves(table):
+        for col in range(8):
+            if table[0][col]==" ":
+                return False
+        return True
+
 
     @staticmethod
     def is_winner(table,isRed):
@@ -67,5 +79,14 @@ class Helper:
                 else:
                     count = 0
         
+        for i in range(4):
+            for j in range(5):
+                if table[i][j]==check and table[i+1][j+1]==check and table[i+2][j+2]==check and table[i+3][j+3]==check:
+                    return True
+
+        for i in range(4):
+            for j in range(3,8):
+                if table[i][j]==check and table[i+1][j-1]==check and table[i+2][j-2]==check and table[i+3][j-3]==check:
+                    return True
         return False
 
