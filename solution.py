@@ -1,9 +1,12 @@
 from utils import Helper
+from heuristic1 import Heuristic1
+from heuristic2 import Heuristic2
+from heuristic3 import Heuristic3
 import time
 import random
 
-INF = 10000000
-MININF = -10000000
+INF = 1000000000
+MININF = -1000000000
 """
 Eger hamle siramizda diger oyuncunun garantilemis oldugu kazanc degerinden
 daha berbat bir kazanc degeri gorursek biz bu daha berbat olan hamleyi oynariz.
@@ -15,23 +18,23 @@ RED kazancini maximize etmeye calisir
 BLACK RED'in kazancini minimize etmeye calisir
 """
 
-def heuristic1(table):
-    return random.randint(1,100)
+def h1(table):
+    return Heuristic1.evaluate(table)
 
-def heuristic2(table):
-    return random.randint(1,100)
+def h2(table):
+    return Heuristic2.evaluate(table)
 
-def heuristic3(table):
-    return random.randint(1,100)
+def h3(table):
+    return Heuristic3.evaluate(table)
 
 def minimax(table,depth,depthlim,isRed,alpha,beta,heuristic_type):
     if depth == depthlim:
         if heuristic_type==1:
-            return heuristic1(table)
+            return h1(table)
         elif heuristic_type==2:
-            return heuristic2(table)
+            return h2(table)
         else:
-            return heuristic3(table)
+            return h3(table)
 
     if isRed: # Red is playing. He will maximize its profit.
         bestVal = MININF
@@ -85,8 +88,10 @@ def minimax(table,depth,depthlim,isRed,alpha,beta,heuristic_type):
 
 # minimax(table,depth,depthlim,isRed,alpha,beta,heuristic_type):
 def get_AI_move(table,isRed,depthlim,heuristic_type):
+    Helper.print_table(table)
     print("AI is thinking...")
     minimax(table,0,depthlim,isRed,MININF,INF,heuristic_type)
+    print("\n\n\n\n\n\n\n\n")
     
 
 def get_human_move(table,isRed):
@@ -279,12 +284,11 @@ def ai_ai():
     print("\n\n\n\n\n\n\n\n")
     depthlim_black = 0
     while depthlim_black == 0:
-        print("1 to 4: Novice")
-        print("5 to 8: Apprentice")
-        print("8 to 11: Adept")
-        print("11 to 14: Expert")
+        print("1 to 3: Novice")
+        print("4 to 6: Apprentice")
+        print("7 to 9: Expert")
         ch = input("Enter the depth level for Black AI.\n")
-        if ch in ("1","2","3","4","5","6","7","8","9","10","11","12","13","14"):
+        if ch in ("1","2","3","4","5","6","7","8","9"):
             depthlim_black = int(ch)
         else:
             print("\n\n\n\n\n\n\n\n")
@@ -351,4 +355,28 @@ def start():
 
 
 start()
+# Below code will never compile unless you comment out start() function.
+# These codes are used to see the move a heuristic perform with specific
+# table arrangment.
+curr = """
+| |R| | | | | | |
+| |R| | | | | | |
+|B|B| | | | | | |
+|R|B|B| | | | |B|
+|R|R|R|B|B| | |R|
+|B|B|B|R|R|R| |R|
+|B|R|B|B|B|R| |R|
+"""
+table = []
+for c in curr:
+    if c=="\n":
+        table.append([])
+    elif c=="|":
+        continue
+    else:
+        table[len(table)-1].append(c)
 
+Helper.print_table(table)
+minimax(table,0,5,True,MININF,INF,2)
+print("Result:")
+Helper.print_table(table)
