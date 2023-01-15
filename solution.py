@@ -226,12 +226,11 @@ def human_ai():
     depthlim = 0
     # Then ask the depth limit for AI.
     while depthlim == 0:
-        print("1 to 4: Novice")
-        print("5 to 8: Apprentice")
-        print("8 to 11: Adept")
-        print("11 to 14: Expert")
+        print("1 to 3: Novice")
+        print("4 to 6: Apprentice")
+        print("7 to 9: Expert")
         ch = input("Enter the depth level for AI.\n")
-        if ch in ("1","2","3","4","5","6","7","8","9","10","11","12","13","14"):
+        if ch in ("1","2","3","4","5","6","7","8","9"):
             depthlim = int(ch)
         else:
             print("\n\n\n\n\n\n\n\n")
@@ -297,12 +296,11 @@ def ai_ai():
     print("\n\n\n\n\n\n\n\n")
     depthlim_red = 0
     while depthlim_red == 0:
-        print("1 to 4: Novice")
-        print("5 to 8: Apprentice")
-        print("8 to 11: Adept")
-        print("11 to 14: Expert")
+        print("1 to 3: Novice")
+        print("4 to 6: Apprentice")
+        print("7 to 9: Expert")
         ch = input("Enter the depth level for Red AI.\n")
-        if ch in ("1","2","3","4","5","6","7","8","9","10","11","12","13","14"):
+        if ch in ("1","2","3","4","5","6","7","8","9"):
             depthlim_red = int(ch)
         else:
             print("\n\n\n\n\n\n\n\n")
@@ -427,6 +425,6 @@ for c in curr:
         table[len(table)-1].append(c)
 
 Helper.print_table(table)
-minimax(table,0,5,True,MININF,INF,2)
+minimax(table,0,1,True,MININF,INF,1)
 print("Result:")
 Helper.print_table(table)
