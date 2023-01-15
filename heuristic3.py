@@ -1,3 +1,41 @@
+# Heuristic3 is our strongest opponent.
+# It performs extremely well even if depthlimit is 1.
+# Thats incredible.
+
+# We check what is the longest line
+# of red or black stones we can make in the current table arrangment.
+
+# Notice we are considering the utility of next move. So, we only consider
+# empty slots where we can place our stones. Computations are performed on
+# these empty slots. These slots are largest row indexed slots which are empty.
+
+"""
+For example consider the table:
+| | | | | | | | |
+| | | | | | | | |
+|R|B| | | | | | |
+|R|B| | | | | |B|
+|R|R|R|B|B| | |R|
+|B|B|B|R|R|R| |R|
+|B|R|B|B|B|R| |R|
+Here, we consider the slots represented by letter 'X'.
+| | | | | | | | |
+|X|X| | | | | | |
+|R|B| | | | | |X|
+|R|B|X|X|X| | |B|
+|R|R|R|B|B|X| |R|
+|B|B|B|R|R|R| |R|
+|B|R|B|B|B|R|X|R|
+We compute the length of the largest line we can make if we place
+R or B into these X slots. We then compute balance accordingly.
+
+
+We use 30^max_len
+
+It is solely depends our observation.
+10 is playing without very much attention. 50 is playing too safe.
+30 is fine.
+"""
 class Heuristic3:
     @staticmethod
     def evaluate(table):
@@ -18,14 +56,14 @@ class Heuristic3:
 
     @staticmethod
     def getmax_profit(table,i,j,color):
-        return 10**(max(
+        return 30**(max(
             min(4,Heuristic3.count_right_increasing_diagonal(table,i,j,color)+Heuristic3.count_left_increasing_diagonal(table,i,j,color)),
             min(4,Heuristic3.count_right_decreasing_diagonal(table,i,j,color)+Heuristic3.count_left_decreasing_diagonal(table,i,j,color)),
             min(4,Heuristic3.count_below(table,i,j,color)),
             min(4,Heuristic3.cout_right_horizontal(table,i,j,color)+Heuristic3.count_left_horizontal(table,i,j,color))
         )+1)
 
-
+    # Function names are sufficient enough to understand the workings.
     """
        *
       *

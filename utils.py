@@ -1,3 +1,5 @@
+# The name of the functions are sufficient enough to
+# explain internal workings.
 class Helper:
     @staticmethod
     def initialize_table():
@@ -9,6 +11,7 @@ class Helper:
 
     @staticmethod
     def print_table(table):
+        # Print the table in a pleasing way.
         for i in range(8):
             print("-"+str(i+1),end="")
         print("-")
@@ -25,6 +28,7 @@ class Helper:
 
     @staticmethod
     def valid_column_number(table,col):
+        # Check if the entered column number is valid.
         col = str(col)
         if col.isnumeric()==False:
             return False

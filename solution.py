@@ -1,23 +1,35 @@
+"""
+   ____ ____  _____ _  _    ___   ___   ___  
+  / ___/ ___|| ____| || |  / _ \ ( _ ) ( _ ) 
+ | |   \___ \|  _| | || |_| | | |/ _ \ / _ \ 
+ | |___ ___) | |___|__   _| |_| | (_) | (_) |
+  \____|____/|_____|  |_|  \___/ \___/ \___/ 
+  _ __  _ __ ___ (_) ___  ___| |_            
+ | '_ \| '__/ _ \| |/ _ \/ __| __|           
+ | |_) | | | (_) | |  __/ (__| |_            
+ | .__/|_|  \___// |\___|\___|\__|           
+ |_|           |__/                          
+
+ ONURCAN ISLER 150120825
+ ERKAM KARACA 150118021
+
+
+In our code, we gave great importance to make sure that
+users entering VALID inputs. In fact our program constists
+of really few lines of code. These error checks caused to
+be a bit long. The is really playable and easy to follow.
+"""
 from utils import Helper
 from heuristic1 import Heuristic1
 from heuristic2 import Heuristic2
 from heuristic3 import Heuristic3
 import time
-import random
 
 INF = 1000000000
 MININF = -1000000000
-"""
-Eger hamle siramizda diger oyuncunun garantilemis oldugu kazanc degerinden
-daha berbat bir kazanc degeri gorursek biz bu daha berbat olan hamleyi oynariz.
-Bu esnada diger hamlelerin kazanc degerlerine bakmamiza gerek bile yoktur cunku
-diger oyuncu eninde sonunda garantilemis oldugu hamleyi oynayacaktir ne de olsa
-biz berbat bir kazanc degerini ona sunuyor olacagiz. O da bunu secmeyecektir.
 
-RED kazancini maximize etmeye calisir
-BLACK RED'in kazancini minimize etmeye calisir
-"""
-
+# Our heuristic functions. See their implementations in relevant code files.
+# h1 is novice, h2 is apprentice, h3 is expert
 def h1(table):
     return Heuristic1.evaluate(table)
 
@@ -27,7 +39,32 @@ def h2(table):
 def h3(table):
     return Heuristic3.evaluate(table)
 
+
+# Minimax algorithm with Alpha Beta prunnning
+"""
+THE WHOLE IDEA OF OUR ALGORITHM IS THAT WE GO TO THE DEEPEST NODE BY
+CONSIDERING DEPTH LIMIT. AT THIS LEVEL, WE EVALUATE THE HEURISTIC
+VALUES OF THE STATES. NOTICE THAT WE ONLY PERFORM THESE EVALUATIONS
+ON DEPTH LIMIT LEVEL. THEN WE APPLY ALPHA BETA PRUNNING BY USING
+THESE EVALUATION VALUES.
+
+RED IS THE MAXIMIZER AND PLAYS FIRST.
+BLACK IS THE MINIMIZER AND PLAYS SECOND.
+"""
+
+"""
+TURKISH NOTES FOR ALPHA BETA PRUNNING:
+Eger hamle siramizda diger oyuncunun garantilemis oldugu kazanc degerinden
+daha berbat bir kazanc degeri gorursek biz bu daha berbat olan hamleyi oynariz.
+Bu esnada diger hamlelerin kazanc degerlerine bakmamiza gerek bile yoktur cunku
+diger oyuncu eninde sonunda garantilemis oldugu hamleyi oynayacaktir ne de olsa
+biz berbat bir kazanc degerini ona sunuyor olacagiz. O da bunu secmeyecektir.
+
+RED kazancini maximize etmeye calisir
+BLACK RED'in kazancini minimize etmeye calisir
+"""
 def minimax(table,depth,depthlim,isRed,alpha,beta,heuristic_type):
+    # We do not look further. Time to return the balance profit.
     if depth == depthlim:
         if heuristic_type==1:
             return h1(table)
@@ -38,7 +75,7 @@ def minimax(table,depth,depthlim,isRed,alpha,beta,heuristic_type):
 
     if isRed: # Red is playing. He will maximize its profit.
         bestVal = MININF
-        bestplay = -1
+        bestplay = -1 # Best column to pick.
         for column in range(1,9):
             if table[0][column-1]!=" ":
                 continue
@@ -63,12 +100,12 @@ def minimax(table,depth,depthlim,isRed,alpha,beta,heuristic_type):
     
     else: # Black is playing. He will minimize Red's profit.
         bestVal = INF
-        bestplay = -1
+        bestplay = -1 # Best column to pick.
         for column in range(1,9):
             if table[0][column-1]!=" ":
                 continue
             row = Helper.perform_move(table,column,isRed)
-            if Helper.is_winner(table,isRed):
+            if Helper.is_winner(table,isRed): # If winner than just stopping looking any further.
                 bestVal = MININF
                 bestplay = column
                 table[row][column-1] = " "
@@ -88,6 +125,8 @@ def minimax(table,depth,depthlim,isRed,alpha,beta,heuristic_type):
 
 # minimax(table,depth,depthlim,isRed,alpha,beta,heuristic_type):
 def get_AI_move(table,isRed,depthlim,heuristic_type):
+    # Time to call mnimax function. Print out the table so that user
+    # will be able to follow the game.
     Helper.print_table(table)
     print("AI is thinking...")
     minimax(table,0,depthlim,isRed,MININF,INF,heuristic_type)
@@ -95,7 +134,8 @@ def get_AI_move(table,isRed,depthlim,heuristic_type):
     
 
 def get_human_move(table,isRed):
-    while True:
+    while True: # There are many error checks for the inputs.
+        # Read the column number the human wants to play.
         Helper.print_table(table)
         if isRed:
             print("Red will play.")
@@ -117,6 +157,7 @@ def get_human_move(table,isRed):
 
 def human_human():
     table = Helper.initialize_table()
+    # Call get_human_move() function turn by turn.
     for turn in range(56):
         print("\n\n\n\n\n\n\n\n")
         if turn%2==0:
@@ -146,6 +187,7 @@ def human_human():
 def human_ai():
     print("\n\n\n\n\n\n\n\n")
     color = 0
+    # First ask the color human wants to play.
     while color == 0:
         print("1. Red")
         print("2. Black")
@@ -162,6 +204,7 @@ def human_ai():
 
     print("\n\n\n\n\n\n\n\n")
     heuristic_type = 0
+    # Then ask the difficulty of heuristic function.
     while heuristic_type == 0:
         print("1. Novice")
         print("2. Apprentice")
@@ -181,6 +224,7 @@ def human_ai():
     
     print("\n\n\n\n\n\n\n\n")
     depthlim = 0
+    # Then ask the depth limit for AI.
     while depthlim == 0:
         print("1 to 4: Novice")
         print("5 to 8: Apprentice")
@@ -193,7 +237,7 @@ def human_ai():
             print("\n\n\n\n\n\n\n\n")
             "Invalid input. Please try again."
 
-    
+    # Call get_human_move() and get_AI_move() functions turn by turn. Thats it!
     table = Helper.initialize_table()
     for turn in range(56):
         print("\n\n\n\n\n\n\n\n")
@@ -229,6 +273,8 @@ def human_ai():
 
 
 def ai_ai():
+
+    # Get depth limit and heuristic function types for each AI.
     print("\n\n\n\n\n\n\n\n")
     heuristic_type_red = 0
     while heuristic_type_red == 0:
@@ -294,7 +340,9 @@ def ai_ai():
             print("\n\n\n\n\n\n\n\n")
             "Invalid input. Please try again."
 
-
+    # Play them turn by turn.
+    # But also make sure to wait one second after each move.
+    # So, that we will be able to follow the game.
     table = Helper.initialize_table()
     for turn in range(56):
         print("\n\n\n\n\n\n\n\n")
@@ -327,6 +375,8 @@ def ai_ai():
 
 
 def start():
+    # Print out the menu.
+    # Ask the game type.
     print("\n\n\n\n\n\n\n\n")
     while True:
         print("**********************")
@@ -353,7 +403,7 @@ def start():
                 print("\n\n\n\n\n\n\n\n")
                 print("Invalid input. Please only enter the index of the game.")
 
-
+# Start the game.
 start()
 # Below code will never compile unless you comment out start() function.
 # These codes are used to see the move a heuristic perform with specific

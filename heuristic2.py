@@ -1,3 +1,11 @@
+"""
+In heuristic3 we were peforming computations on empty slots
+with largest row values, i.e., the next moves.
+
+But here, we consider all slots.
+* If there are many R stones close to each other than it is good.
+* If there are many B stones close to each other than it is bad.
+"""
 class Heuristic2:
     @staticmethod
     def evaluate(table):
